@@ -91,10 +91,16 @@ class Welance_Kraken_Helper_Data extends Mage_Core_Helper_Abstract
                 continue;
             }
 
-            if (!in_array($object->getExtension(),$imageTypes)) {
-                continue;
+ 	    // SplFileInfo::getExtension NOT supported < 5.3.6
+	    if (method_exists('SplFileInfo', 'getExtension')) {
+	        if (!in_array($object->getExtension(),$imageTypes)) {
+			continue;
+		}
+	    } else {
+		if (!in_array(pathinfo($imageName, PATHINFO_EXTENSION),$imageTypes)) {
+			continue;
+		}
             }
-
 
             $checksum = sha1_file($fullpath);
             $_dir = str_replace($rootDir.DS,'',$object->getPath());
@@ -237,18 +243,25 @@ class Welance_Kraken_Helper_Data extends Mage_Core_Helper_Abstract
      * @return bool
      */
 
-    public function imageExits($type, $path, $imageName, $checksum)
+    public function imageExists($type, $path, $imageName, $checksum)
     {
         $resource = Mage::getSingleton('core/resource');
 
         $readConnection = $resource->getConnection('core_read');
 
+        $select = $readConnection->select();
+
         $table = $resource->getTableName('welance_kraken/images_'.$type);
 
-        $query = "SELECT `id` FROM `{$table}` WHERE `path` = '{$path}' AND `image_name` = '{$imageName}' AND
-                  (`original_checksum` = '{$checksum}' OR `checksum_after_upload` = '{$checksum}')";
+        $imageNameEscaped = $readConnection->quote($imageName);
 
-        if ($readConnection->fetchOne($query) !== false) {
+        $select = $readConnection->select()
+            ->from($table, array('id'))
+            ->where('path = ?', $path)
+            ->where('image_name = ?', $imageNameEscaped)
+            ->where('original_checksum = ? OR checksum_after_upload = ?', $checksum);
+
+        if ($readConnection->fetchOne($select) !== false) {
             return true;
         }
 
