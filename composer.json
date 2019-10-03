@@ -1,16 +1,19 @@
 {
-    "name": "OpenMageModuleFostering/Kraken_Image_Optimizer",
+    "name": "OpenMageModuleFostering\/Kraken_Image_Optimizer",
     "type": "magento-module",
     "license": "GNU-General-Public-License-(GPL)",
     "homepage": "",
-    "description": "This extension enables Magento users to optimize their product, skin and media images by consuming the Kraken.io image optimization API. (https://kraken.io)",
+    "description": "This extension enables Magento users to optimize their product, skin and media images by consuming the Kraken.io image optimization API. (https:\/\/kraken.io)",
     "authors": [
-    {
-        "name": "Nekkra UG",
-        "email": "support@kraken.io"
-    }
-],
+        {
+            "name": "Nekkra UG",
+            "email": "support@kraken.io"
+        }
+    ],
     "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+        "magento-hackathon\/magento-composer-installer": "*"
+    },
+    "keywords": [
+        "openmage-module"
+    ]
 }
