@@ -1,3 +1,5 @@
+
+
 ## Original Package Description
 
 This extension enables Magento users to optimize their product, skin and media images by consuming the Kraken.io image optimization API. (https://kraken.io)
